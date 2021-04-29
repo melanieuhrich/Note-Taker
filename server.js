@@ -2,9 +2,10 @@
 const express = require('express');
 const path = require('path');
 const db = require('./db/db.json');
-const { nanoid } = require('nanoid');
+// const { nanoid } = require('nanoid');
+let counter = 1;
+// const id = nanoid(10);
 
-const id = nanoid(10);
 
 // Sets up Express
 const app = express();
@@ -17,12 +18,11 @@ app.use(express.json());
 // Static file is like index.html, or script.js
 app.use(express.static('public'));
 
-// Retursn the index.html file
+// Returns the index.html file
 app.get('/', (req, res) => res.sendFile(path.join(__dirname, '/public/index.html')));
 
 // Returns the notes.html file
 app.get('/notes', (req, res) => res.sendFile(path.join(__dirname, '/public/notes.html')));
-
 
 // Read and return the db.json file
 app.get('/api/notes', (req, res) => res.json(db))
@@ -30,14 +30,19 @@ app.get('/api/notes', (req, res) => res.json(db))
 // Receive and save note to db.json 
 app.post('/api/notes', (req, res) => {
     const newNote = req.body;
+    newNote.id = counter;
+    counter = counter + 1;
     db.push(newNote);
-    // console.log(db);
+    console.log(db);
     res.json(newNote)
 })
 
 // Then return new note to client 
-app.get('/api/notes', (req, res) => res.json(db+id));
-console.log(id);
+app.get('/api/notes/:id', (req, res) => {res.json(db)});
+// loop through and if id matches display
+
+// Delete the note 
+// app.delete('/api/notes/:id')
 
 // Tells the server to begin listening 
 app.listen(PORT, () => console.log(`App listening on PORT http://localhost:${PORT}`));
