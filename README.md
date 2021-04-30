@@ -29,7 +29,7 @@ Lines 40-45: Create const deleted by referencing the id. Redefine db to equal db
 Line 48: Tells the server to begin listening on the established port. 
 
 ## Screenshot
-![screenshot](screenshot.png)
+![screenshot](/Assets/screenshot.png)
 
 ## Link to Deployed Application 
 https://immense-scrubland-11371.herokuapp.com/ 
