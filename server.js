@@ -1,10 +1,9 @@
 // Dependencies 
 const express = require('express');
 const path = require('path');
-const db = require('./db/db.json');
-// const { nanoid } = require('nanoid');
-let counter = 1;
-// const id = nanoid(10);
+let db = require('./db/db.json');
+const fs = require('fs');
+const { nanoid } = require('nanoid');
 
 
 // Sets up Express
@@ -30,19 +29,19 @@ app.get('/api/notes', (req, res) => res.json(db))
 // Receive and save note to db.json 
 app.post('/api/notes', (req, res) => {
     const newNote = req.body;
-    newNote.id = counter;
-    counter = counter + 1;
+    newNote.id = nanoid();
     db.push(newNote);
-    console.log(db);
-    res.json(newNote)
+    fs.writeFileSync('./db/db.json', JSON.stringify(db));
+    res.json(newNote);
 })
 
-// Then return new note to client 
-app.get('/api/notes/:id', (req, res) => {res.json(db)});
-// loop through and if id matches display
-
 // Delete the note 
-// app.delete('/api/notes/:id')
+app.delete('/api/notes/:id', (req, res) => {
+    const deleted = req.params.id;
+    db = db.filter(note => note.id !== deleted);
+    fs.writeFileSync('./db/db.json', JSON.stringify(db));
+    res.json(db);
+} )
 
 // Tells the server to begin listening 
 app.listen(PORT, () => console.log(`App listening on PORT http://localhost:${PORT}`));
