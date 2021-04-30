@@ -5,9 +5,10 @@ let db = require('./db/db.json');
 const fs = require('fs');
 const { nanoid } = require('nanoid');
 
-
 // Sets up Express
 const app = express();
+
+// Sets the port 
 const PORT = process.env.PORT || 8080; 
 
 // Sets up Express to handle data parsing
@@ -41,7 +42,7 @@ app.delete('/api/notes/:id', (req, res) => {
     db = db.filter(note => note.id !== deleted);
     fs.writeFileSync('./db/db.json', JSON.stringify(db));
     res.json(db);
-} )
+})
 
 // Tells the server to begin listening 
 app.listen(PORT, () => console.log(`App listening on PORT http://localhost:${PORT}`));
